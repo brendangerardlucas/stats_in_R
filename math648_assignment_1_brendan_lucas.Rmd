@@ -1,0 +1,65 @@
+---
+title: "Assignment 1"
+author: "Brendan Lucas"
+date: "02/07/2024"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Question1:** Show that for a Poisson random variable $X$ with probability mass function $f_{X}(k) = \dfrac{\lambda^k}{k!}e^{-\lambda}$, the expected value and variance are given by $E[X] = Var(X) = \lambda$.
+
+\[E[X] = \sum_k k \dfrac{\lambda^k}{k!}e^{-\lambda}\]
+\[E[X] = \sum_k \dfrac{\lambda^k}{(k-1)!}e^{-\lambda}\]
+\[E[X] = \lambda e^{-\lambda} \sum_k \dfrac{\lambda^{k-1}}{(k-1)!} \]
+\[\sum_x \frac{a^x}{x!} = e^a, \qquad x = k - 1, \qquad a = \lambda\]
+\[ E[X] = \lambda e^{-\lambda} e^\lambda = \lambda\]
+Q.E.D $E[X] = \lambda$.
+
+Remember $Var(X) = E[X^2] - E[X]^2$.
+\[E[X^2] = \sum_k k^2 \dfrac{\lambda^k}{k!}e^{-\lambda} \]
+\[E[X^2] = e^{-\lambda}\sum_k k^2 \dfrac{\lambda^k}{k!} \]
+\[E[X^2] = \lambda e^{-\lambda}\sum_k k^2 \dfrac{\lambda^{k-1}}{k!} \]
+\[E[X^2] = \lambda e^{-\lambda}\sum_k k \dfrac{\lambda^{k-1}}{(k-1)!} \]
+\[E[X^2] = \lambda e^{-\lambda}\left[ \sum_k (k-1) \dfrac{\lambda^{k-1}}{(k-1)!}  + \sum_k \dfrac{\lambda^{k-1}}{(k-1)!}\right] \]
+\[E[X^2] = \lambda e^{-\lambda}\left[ \lambda^{-1} \sum_k \dfrac{\lambda^{k-2}}{(k-2)!}  + \sum_k \dfrac{\lambda^{k-1}}{(k-1)!}\right] \]
+\[E[X^2] = \lambda e^{-\lambda}\left[ \lambda^{-1} e^{\lambda} + e^\lambda \right] \]
+\[E[X^2] = \lambda^2 + \lambda\]
+\[ Var(X) = E[X^2] - E[X]^2 = \lambda^2 + \lambda - \lambda^2 = \lambda \]
+Q.E.D. $Var(X) = \lambda$
+
+
+**Question2:** Use the `ggplot2` package to plot $\chi^2$ distributions with $1, 2, 5,$ and $10$ degrees of freedom. 
+$$P(\chi^2|n) = \frac{2^{-\frac{n}{2}}}{\Gamma(\frac{n}{2})}\chi^{n-2}e^{-\chi^2/s}$$
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+
+x <- seq(0, 20, by = 0.1)
+
+chi_1_plot = ggplot(data.frame(x=x, chi_1=dchisq(x, df=1)),
+                    aes(x=x, y=chi_1))+ geom_line(color = 'blue',
+                    linewidth = 1.2) + theme_bw() + labs(title="n=1")
+
+chi_2_plot = ggplot(data.frame(x=x, chi_2=dchisq(x, df=2)),
+                    aes(x=x, y=chi_2)) + geom_line(color = 'green',
+                    linewidth = 1.2)+ theme_bw() + labs(title="n=2")
+
+chi_5_plot = ggplot(data.frame(x=x, chi_5=dchisq(x, df=5)),
+                    aes(x=x, y=chi_5)) + geom_line(color = 'yellow',
+                    linewidth = 1.2)+ theme_bw() + labs(title="n=5")
+
+chi_10_plot = ggplot(data.frame(x=x, chi_10=dchisq(x, df=1)), 
+            aes(x=x, y=chi_10)) + geom_line(color = 'red',
+            linewidth = 1.2) + theme_bw() + labs(title="n=10")
+
+grid.arrange(chi_1_plot, chi_2_plot, chi_5_plot, chi_10_plot, ncol=2)
+
+
+```
+
